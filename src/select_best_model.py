@@ -30,7 +30,10 @@ except Exception:
     print(f"Model '{model_name}' already exists.")
 
 # Create a new model version
-model_uri = f"./mlruns/715266732106744842/54eff0499a694dcb8e1b220217818d29/artifacts/model"
+model_uri = (
+    "./mlruns/715266732106744842/"
+    "54eff0499a694dcb8e1b220217818d29/artifacts/model"
+)
 client.create_model_version(
     name=model_name,
     source=model_uri,

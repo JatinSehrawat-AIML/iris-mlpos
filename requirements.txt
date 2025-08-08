@@ -84,6 +84,7 @@ pandas
 pathspec==0.12.1
 pillow
 platformdirs<4,>=3.1.1
+prometheus-client
 prompt_toolkit==3.0.51
 propcache
 protobuf

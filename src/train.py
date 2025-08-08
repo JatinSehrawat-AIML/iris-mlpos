@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 import mlflow
 import mlflow.sklearn
@@ -27,6 +26,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 mlflow.set_tracking_uri("file:./mlruns")  # local tracking
 mlflow.set_experiment("iris-mlops")
 
+
 # ==== Model training functions ====
 def train_logistic_regression():
     with mlflow.start_run(run_name="LogisticRegression"):
@@ -52,6 +52,7 @@ def train_logistic_regression():
 
         print(f"✅ Logistic Regression accuracy: {acc:.4f}")
 
+
 def train_random_forest():
     with mlflow.start_run(run_name="RandomForest"):
         model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -75,6 +76,7 @@ def train_random_forest():
         )
 
         print(f"✅ Random Forest accuracy: {acc:.4f}")
+
 
 # ==== Run both models ====
 if __name__ == "__main__":
