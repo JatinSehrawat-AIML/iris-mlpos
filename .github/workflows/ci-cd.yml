@@ -1,29 +1,28 @@
-name: CI/CD Iris MLOps
+name: CI/CD Mlops Iris
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  build-train-deploy:
+  lint-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
+      - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.9
-
+          python-version: '3.9'
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-
-      - name: Train Model
+          python -m pip install --upgrade pip
+          pip install flake8 pytest -r requirements.txt
+      - name: Run linter
         run: |
-          python src/train.py
-
-      - name: Run Tests (Optional)
-        run: echo "Add your unit tests here"
+          flake8 .
+      - name: Run tests
+        run: |
+          pytest --maxfail=1 --disable-warnings -q

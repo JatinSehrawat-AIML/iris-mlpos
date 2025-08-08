@@ -1,0 +1,15 @@
+artifact_uri: file:///mnt/c/New folder/Assignment/iris-mlops/mlruns/382807980313036346/37105d7a852748959f218fab228cfefe/artifacts
+end_time: 1754666023973
+entry_point_name: ''
+experiment_id: '382807980313036346'
+lifecycle_stage: active
+run_id: 37105d7a852748959f218fab228cfefe
+run_name: LogisticRegression
+run_uuid: 37105d7a852748959f218fab228cfefe
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1754666017469
+status: 3
+tags: []
+user_id: jatin-sehrawat
