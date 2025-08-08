@@ -10,6 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
+
 app = FastAPI()
 model = joblib.load("models/model.pkl")
 
@@ -17,8 +18,13 @@ model = joblib.load("models/model.pkl")
 start_http_server(8001)
 
 # Define Prometheus metrics
-PREDICTION_COUNT = Counter("prediction_requests_total", "Total predictions made")
-PREDICTION_LATENCY = Histogram("prediction_request_duration_seconds", "Prediction latency")
+PREDICTION_COUNT = Counter(
+    "prediction_requests_total", "Total predictions made"
+)
+PREDICTION_LATENCY = Histogram(
+    "prediction_request_duration_seconds", "Prediction latency"
+)
+
 
 # Initialize DB and create logs table if not exists
 def init_db():
@@ -40,7 +46,9 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 init_db()
+
 
 class IrisInput(BaseModel):
     sepal_length: float = Field(..., gt=0)
@@ -56,9 +64,11 @@ class IrisInput(BaseModel):
             raise ValueError("petal_length should be less than sepal_length")
         return v
 
+
 @app.get("/")
 def root():
     return {"message": "Iris Classifier Ready"}
+
 
 @app.post("/predict")
 @PREDICTION_LATENCY.time()
@@ -111,14 +121,18 @@ def predict_iris(input: IrisInput):
 
     return {"prediction": prediction}
 
+
 def train_new_model(X, y):
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42
+    )
     clf = RandomForestClassifier(n_estimators=100, random_state=42)
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
     print(f"New model trained with accuracy: {accuracy}")
     return clf
+
 
 @app.post("/retrain")
 def retrain(data: List[IrisInput]):
