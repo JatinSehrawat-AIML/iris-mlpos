@@ -1,155 +1,140 @@
-# Iris MLOps Project
+🌸 Iris MLOps Pipeline
+An end-to-end MLOps implementation for classifying Iris flowers, showcasing model training, version control, experiment tracking, deployment, and monitoring using modern DevOps and ML tools.
 
-This project demonstrates a complete end-to-end MLOps pipeline for classifying Iris flowers using a machine learning model, integrating tools like DVC, MLflow, FastAPI, and GitHub Actions.
+🚀 Key Features
+Model Training: scikit-learn RandomForest classifier
 
-## Project Features
+Data Versioning: DVC for reproducible datasets
 
-- ML model training with scikit-learn  
-- Dataset versioning using DVC  
-- Model tracking and logging with MLflow  
-- REST API for inference using FastAPI  
-- CI/CD setup via GitHub Actions (optional)  
-- Docker-ready for containerization  
+Experiment Tracking: MLflow for metrics, parameters, and artifacts
 
-## Project Structure
+Model Serving: FastAPI REST API for real-time predictions
 
-``` bash 
-iris/
-├── .dvc/                  # DVC-related files for data/version control
-├── .github/               # GitHub workflows (CI/CD actions etc.)
-├── app/                   # Application interface or deployment-related code
-├── data/                  # Raw and processed datasets
-├── mlflow_logs/           # MLflow experiment logs
-├── mlruns/                # MLflow tracking run data
+Automation: GitHub Actions for CI/CD workflows
+
+Containerization: Docker for consistent deployment environments
+
+📂 Project Structure
+bash
+Copy
+Edit
+iris-mlops/
+├── .dvc/                  # DVC metadata for data versioning
+├── .github/               # GitHub Actions workflows
+├── app/                   # FastAPI application for inference
+├── data/                  # Raw and processed data
+├── mlflow_logs/           # MLflow experiment log storage
+├── mlruns/                # MLflow tracking data
 ├── models/                # Trained model artifacts
-├── src/                   # Core source code for training and inference
-│   ├── predict.py         # Prediction/inference logic
-│   ├── train.py           # Model training script
-│   ├── utils.py           # Utility functions
-├── venv/                  # Python virtual environment (usually not committed)
-├── .dvcignore             # DVC ignore file (like .gitignore)
-├── .gitignore             # Git ignore rules
-├── Dockerfile             # Docker setup for containerizing the project
-├── dvc.yaml               # DVC pipeline stages and dependencies
-├── README.md              # Project overview and documentation
+├── src/                   # Source code
+│   ├── train.py           # Model training
+│   ├── predict.py         # Prediction logic
+│   ├── utils.py           # Helper functions
+├── Dockerfile             # Docker build configuration
+├── dvc.yaml               # DVC pipeline configuration
 ├── requirements.txt       # Python dependencies
-```
-## Setup Instructions
-
-1. Clone and Install Dependencies
-
-```bash
-git clone <your-repo-url>
-cd iris-mlops-project
+└── README.md              # Project documentation
+⚙️ Setup Instructions
+1️⃣ Clone the Repository & Install Dependencies
+bash
+Copy
+Edit
+git clone https://github.com/JatinSehrawat-AIML/iris-mlpos.git
+cd iris-mlpos
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-```
-
-2. Download the Dataset
-
-```bash
+2️⃣ Download & Version the Dataset
+bash
+Copy
+Edit
 mkdir -p data
 curl -o data/iris.csv https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.csv
-```
 
-3. Version the Data (Optional but recommended)
-
-```bash
+# Version with DVC
 dvc init
 dvc add data/iris.csv
-git add .dvc data/.gitignore data/iris.csv.dvc
+git add data/iris.csv.dvc .dvc .gitignore
 git commit -m "Add dataset with DVC"
-```
-
-4. Train the Model
-
-```bash
+3️⃣ Train the Model
+bash
+Copy
+Edit
 python src/train.py
-```
-<img width="370" height="156" alt="Screenshot 2025-07-25 at 19 23 22" src="https://github.com/user-attachments/assets/859e85e6-bf5b-42a6-8c28-7708fe482893" />
+✅ Saves the model to models/model.pkl
+✅ Logs results to MLflow
 
-Output:
-- Trains the model  
-- Saves model as models/model.pkl  
-- Logs accuracy and model in MLflow  
-
-5. Run the FastAPI App
-
-```bash
+4️⃣ Serve the Model with FastAPI
+bash
+Copy
+Edit
 uvicorn app.main:app --reload
-```
+Access the API at: http://127.0.0.1:8000
+Swagger UI: http://127.0.0.1:8000/docs
 
-Open in browser:  
-http://127.0.0.1:8000  
-<img width="656" height="259" alt="Screenshot 2025-07-25 at 19 24 35" src="https://github.com/user-attachments/assets/85ff59dd-fc60-40b4-a182-466b112fe864" />
+5️⃣ Make Predictions via API
+Example request:
 
-Swagger docs:  
-http://127.0.0.1:8000/docs
-
-<img width="500" height="500" alt="Screenshot 2025-07-25 at 19 25 10" src="https://github.com/user-attachments/assets/62c599a3-d3a6-45c8-8dce-6761511fc823" />
-<img width="500" height="500" alt="Screenshot 2025-07-25 at 19 25 30" src="https://github.com/user-attachments/assets/d6df11ef-6f79-4b79-9644-93a9e879e1cd" />
-<img width="500" height="500" alt="Screenshot 2025-07-25 at 19 25 37" src="https://github.com/user-attachments/assets/877d0a27-f3eb-4c67-9338-02405c2604ea" />
-<img width="500" height="500" alt="Screenshot 2025-07-25 at 19 25 52" src="https://github.com/user-attachments/assets/66b603fd-6c16-4ff1-b71b-938dd3430f50" />
-
-6. Make Predictions
-
-Use the Swagger UI to call the /predict endpoint with:
-
-```json
+json
+Copy
+Edit
 {
   "sepal_length": 5.1,
   "sepal_width": 3.5,
   "petal_length": 1.4,
   "petal_width": 0.2
 }
-```
+Example response:
 
-Expected response:
-
-```json
+json
+Copy
+Edit
 {
   "prediction": "setosa"
 }
-```
-
-7. Launch MLflow Dashboard
-
-```bash
+6️⃣ Monitor Experiments in MLflow
+bash
+Copy
+Edit
 mlflow ui
-```
-<img width="737" height="271" alt="Screenshot 2025-07-25 at 19 27 52" src="https://github.com/user-attachments/assets/2e892ffb-28dd-49c2-96ad-a101ba13c76e" />
+Open: http://127.0.0.1:5000
 
+🛠 Tools & Technologies
+Machine Learning: scikit-learn, joblib
 
+MLOps: DVC, MLflow
 
-Open in browser:  
-http://localhost:5000
+API Framework: FastAPI
 
-<img width="700" height="700" alt="Screenshot 2025-07-25 at 19 28 31" src="https://github.com/user-attachments/assets/d8bd1231-86df-4a35-b95e-09a5b0835f9b" />
+Containerization: Docker
 
-<img width="700" height="700" alt="Screenshot 2025-07-25 at 19 28 40" src="https://github.com/user-attachments/assets/ef24b195-eed1-4841-9232-c1420b8da94e" />
+Automation: GitHub Actions
 
-<img width="700" height="700" alt="Screenshot 2025-07-25 at 19 29 13" src="https://github.com/user-attachments/assets/89af2532-37c4-4863-8720-7f28071e02e9" />
+Version Control: Git
 
+📊 Workflow Diagram
+mermaid
+Copy
+Edit
+graph LR
+A[Data Collection] --> B[DVC Versioning]
+B --> C[Model Training - train.py]
+C --> D[MLflow Logging]
+D --> E[Model Storage - models/model.pkl]
+E --> F[FastAPI Deployment]
+F --> G[User Prediction Requests]
+📌 Research/Academic Use
+This project can be used to demonstrate:
 
-## Tools Used
+Complete ML lifecycle from data ingestion to deployment
 
-- scikit-learn for model training  
-- joblib for model serialization  
-- MLflow for experiment tracking  
-- FastAPI for RESTful API  
-- DVC for dataset versioning  
-- Docker for containerization  
-- GitHub Actions for CI/CD  
+Reproducibility via dataset and model versioning
 
-## For Research Paper
+Experiment tracking for research comparisons
 
-You can include this project in your research to demonstrate:  
-- End-to-end machine learning lifecycle  
-- Reproducibility and dataset tracking with DVC  
-- Model performance tracking with MLflow  
-- Real-time predictions using a REST API  
-- Automation of retraining and deployment  
+Real-time inference with API endpoints
 
+Automated CI/CD pipelines for ML models
 
-# iris-mlpos
+📄 License
+This project is licensed under the MIT License – feel free to use and modify.
